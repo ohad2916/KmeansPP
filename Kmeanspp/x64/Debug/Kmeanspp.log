@@ -1,6 +1,0 @@
-﻿  module.c
-C:\Users\ohada\Desktop\SoftwareProject\Kmeanspp\Kmeanspp\module.c(13,21): warning C4244: 'initializing': conversion from 'Py_ssize_t' to 'int', possible loss of data
-C:\Users\ohada\Desktop\SoftwareProject\Kmeanspp\Kmeanspp\module.c(15,21): warning C4244: 'initializing': conversion from 'Py_ssize_t' to 'int', possible loss of data
-C:\Users\ohada\Desktop\SoftwareProject\Kmeanspp\Kmeanspp\module.c(8,12): warning C4101: 'attribute': unreferenced local variable
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(1094,5): error MSB6006: "link.exe" exited with code 1104.
-LINK : fatal error LNK1104: cannot open file 'python37_d.lib'
