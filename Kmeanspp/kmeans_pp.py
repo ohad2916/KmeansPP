@@ -98,6 +98,12 @@ data_wo_key = points_df.iloc[:, 1:].values.tolist()
 print(",".join(f'{i:.0f}' for i in centroids_indices))
 
 # c function, takes data in a list form, and centroids in a list.
-kmeans_res = mykmeanssp.fit(data_wo_key, centroids, iter_, epsilon)
+try:
+    kmeans_res = mykmeanssp.fit(data_wo_key, centroids, iter_, epsilon)
+except:
+    print("An Error Has Occurred")
+    sys.exit()
+
 for cluster in kmeans_res:
     print(','.join(f'{c:.4f}' for c in cluster))
+
