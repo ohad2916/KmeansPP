@@ -58,7 +58,7 @@ def init_centroids(data):
     prob = pd.Series(np.full((data.shape[0], 1), 1 / data.shape[0])[:, 0])
     distances = np.zeros(data.shape[0])
 
-    first_centroid_index = int(np.random.choice(data[data.columns[0]], p=prob))
+    first_centroid_index = int(np.random.choice(data[data.columns[0]]))
     first_centroid = data.iloc[first_centroid_index]
     centroids.append(first_centroid)
 
