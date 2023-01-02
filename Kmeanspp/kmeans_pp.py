@@ -4,40 +4,35 @@ import mykmeanssp
 import sys
 import math
 
-# try:
-#    #total arguments
-#    arg_c = len(sys.argv)
-#    print(sys.argv)
-#    k = int(sys.argv[1])
-#    iter_ = 300
-#    epsilon = int(sys.argv[2])
-#    file_name_1 = sys.argv[-2]
-#    file_name_2 = sys.argv[-1]
-#
-#    if arg_c == 6:
-#        iter_ = int(sys.argv[2])
-#        epsilon = int(sys.argv[3])
-#
-# except:
-#    print("An error has Occurred")
-#    sys.exit()
+arg_c = len(sys.argv)
+if arg_c > 6 or arg_c < 5:
+    print("An Error has Occurred")
+    sys.exit()
+try:
+    # total arguments
+    k = int(sys.argv[1])
+    iter_ = 200
+    if arg_c == 6:
+        iter_ = int(sys.argv[2])
+        epsilon = float(sys.argv[3])
+        file_name_1 = sys.argv[4]
+        file_name_2 = sys.argv[5]
+    elif arg_c == 5:
+        epsilon = float(sys.argv[2])
+        file_name_1 = sys.argv[3]
+        file_name_2 = sys.argv[4]
 
+except Exception as e:
+    print("An error has Occurred")
+    sys.exit()
 
-# if arg_c > 4 or arg_c < 2:
-#    print("An Error has Occurred")
-#    sys.exit()
+if arg_c > 6 or arg_c < 5:
+    print("An Error has Occurred")
+    sys.exit()
 
-# if iter_ > 999:
-#    print("Invalid maximum iteration!")
-#    sys.exit()
-
-
-file_name_1 = r"tests\input_2_db_1.txt"
-file_name_2 = r"tests\input_2_db_2.txt"
-
-k = 7
-iter_ = 200
-epsilon = 0.0
+if iter_ > 999 or iter_ < 1:
+    print("Invalid maximum iteration!")
+    sys.exit()
 
 
 def euc_d(p1, p2, dim):  # sums without key
@@ -85,10 +80,10 @@ def init_centroids(data):
     return pd.DataFrame(centroids)
 
 
-obs1 = pd.read_csv(file_name_1, header = None).values
-obs2 = pd.read_csv(file_name_2, header = None).values
-obs1_df = pd.DataFrame(obs1)
-obs2_df = pd.DataFrame(obs2)
+obs1_df = pd.read_csv(file_name_1, header=None)
+obs2_df = pd.read_csv(file_name_2, header=None)
+# obs1_df = pd.DataFrame(obs1)
+# obs2_df = pd.DataFrame(obs2)
 
 points = pd.merge(obs1_df, obs2_df, how='inner', on=obs1_df.columns[0], sort=True)
 points_df = pd.DataFrame(points)
@@ -100,8 +95,9 @@ centroids_indices = centroids_df.iloc[:, 0].values.tolist()
 centroids = centroids_df.iloc[:, 1:].values.tolist()
 data_wo_key = points_df.iloc[:, 1:].values.tolist()
 
-print(f"centroids_indices: {centroids_indices}")
-
+print(",".join(f'{i:.0f}' for i in centroids_indices))
 
 # c function, takes data in a list form, and centroids in a list.
-mykmeanssp.fit(data_wo_key, centroids, iter_, epsilon)
+kmeans_res = mykmeanssp.fit(data_wo_key, centroids, iter_, epsilon)
+for cluster in kmeans_res:
+    print(','.join(f'{c:.4f}' for c in cluster))
