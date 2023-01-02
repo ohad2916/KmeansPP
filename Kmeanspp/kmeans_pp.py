@@ -32,12 +32,12 @@ import math
 #    sys.exit()
 
 
-file_name_1 = "input_1_db_1.txt"
-file_name_2 = "input_1_db_2.txt"
+file_name_1 = r"tests\input_2_db_1.txt"
+file_name_2 = r"tests\input_2_db_2.txt"
 
 k = 7
-iter_ = 300
-epsilon = 0.01
+iter_ = 200
+epsilon = 0.0
 
 
 def euc_d(p1, p2, dim):  # sums without key
@@ -104,4 +104,4 @@ print(f"centroids_indices: {centroids_indices}")
 
 
 # c function, takes data in a list form, and centroids in a list.
-# mykmeanssp.fit(points.values.tolist(), centroids, iter_, epsilon)
+mykmeanssp.fit(data_wo_key, centroids, iter_, epsilon)
