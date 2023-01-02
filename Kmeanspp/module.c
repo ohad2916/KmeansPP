@@ -52,6 +52,7 @@ static PyObject* fit(PyObject* self, PyObject* args) {
     double** cluster_mean = NULL;
     double* c = NULL;
     double** new_cluster = NULL;
+    size_t j, m, i;
     data = calloc(no_points, sizeof(double*));
     if (!data) {
         PyErr_SetString(PyExc_MemoryError, "An Error Has Occurred");
@@ -65,13 +66,13 @@ static PyObject* fit(PyObject* self, PyObject* args) {
         free_memory(b, c, p, new_cluster, cluster_mean, data);
         return NULL;
     }
-    for (size_t i = 0; i < no_points; i++) {
+    for (i = 0; i < no_points; i++) {
         data[i] = p + i * dimension;
     }
 
-    for (size_t i = 0; i < no_points; i++) {
+    for (i = 0; i < no_points; i++) {
         point = PyList_GetItem(data_lst, i);
-        for (size_t j = 0; j < dimension; j++) {
+        for (j = 0; j < dimension; j++) {
             data[i][j] = PyFloat_AsDouble(PyList_GetItem(point, j));
             //printf("%f,", data[i][j]);
         }
@@ -84,14 +85,14 @@ static PyObject* fit(PyObject* self, PyObject* args) {
         free_memory(b, c, p, new_cluster, cluster_mean, data);
         return NULL;
     }
-    for (size_t i = 0; i < centroid_size; i++) {
+    for (i = 0; i < centroid_size; i++) {
         cluster_mean[i] = b + i * (dimension);
     }
 
-    for (size_t i = 0; i < centroid_size; i++)
+    for (i = 0; i < centroid_size; i++)
     {
         point = PyList_GetItem(centroid_lst, i);
-        for (size_t j = 0; j < dimension; j++){
+        for (j = 0; j < dimension; j++){
             cluster_mean[i][j] = PyFloat_AsDouble(PyList_GetItem(point, j));
         }
     }
@@ -105,21 +106,21 @@ static PyObject* fit(PyObject* self, PyObject* args) {
         free_memory(b, c, p, new_cluster, cluster_mean, data);
         return NULL;
     }
-    for (size_t i = 0; i < centroid_size; i++) {
+    for ( i = 0; i < centroid_size; i++) {
         new_cluster[i] = c + i * (dimension + 1);
     }
 
-    size_t i = 0;
+     i = 0;
     int converged = 0;
     while (i < iter && !converged)
     {
         /*zero out new cluster array*/
         memset(c, 0, centroid_size * (dimension + 1) * sizeof(double));
         /*decide closest cluster against the original and update it with new Xi*/
-        for (size_t m = 0; m < no_points; m++) {
+        for ( m = 0; m < no_points; m++) {
             size_t min_cluster_index = 0;
             double min_value = INT32_MAX;
-            for (size_t j = 0; j < centroid_size; j++)
+            for ( j = 0; j < centroid_size; j++)
             {
                 double curr_euc_d = euc_d(cluster_mean[j], *(curr_X + m), dimension);
                 if (curr_euc_d < min_value)
@@ -130,15 +131,15 @@ static PyObject* fit(PyObject* self, PyObject* args) {
             }
             /*updating new cluster, just adding for now. divide later.*/
             double* min_cluster = new_cluster[min_cluster_index];
-            for (size_t j = 0; j < dimension; j++)
+            for ( j = 0; j < dimension; j++)
             {
                 min_cluster[j] += curr_X[m][j];
             }
             min_cluster[dimension]++;
         }
         /*calculate the actual means*/
-        for (size_t j = 0; j < centroid_size; j++) {
-            for (size_t m = 0; m < dimension; m++) {
+        for ( j = 0; j < centroid_size; j++) {
+            for ( m = 0; m < dimension; m++) {
                 new_cluster[j][m] /= new_cluster[j][dimension];
             }
         }
@@ -146,7 +147,7 @@ static PyObject* fit(PyObject* self, PyObject* args) {
         /*decide convegerence*/
         double max_Duk = 0;
         double curr_Muk = 0;
-        for (size_t j = 0; j < centroid_size; j++) {
+        for ( j = 0; j < centroid_size; j++) {
             curr_Muk = euc_d(cluster_mean[j], new_cluster[j], dimension);
             if (curr_Muk > max_Duk)
                 max_Duk = curr_Muk;
@@ -158,20 +159,20 @@ static PyObject* fit(PyObject* self, PyObject* args) {
         }
         i++;
         /*copy new cluster to old ones*/
-        for (size_t j = 0; j < centroid_size; j++)
+        for ( j = 0; j < centroid_size; j++)
         {
-            for (size_t m = 0; m < dimension; m++)
+            for ( m = 0; m < dimension; m++)
             {
                 cluster_mean[j][m] = new_cluster[j][m];
             }
         }
     }
     PyObject* py_centroids = PyList_New(centroid_size);
-    for (size_t m = 0; m < centroid_size; m++)
+    for ( m = 0; m < centroid_size; m++)
     {
         PyObject* m_cluster = PyList_New(dimension); 
         PyList_SetItem(py_centroids, m, m_cluster);        //raises exception
-        for (size_t j = 0; j < dimension; j++)
+        for ( j = 0; j < dimension; j++)
         {
             PyList_SetItem(m_cluster, j,PyFloat_FromDouble(cluster_mean[m][j]));
         }
