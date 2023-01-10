@@ -51,10 +51,9 @@ def init_centroids(data):
     centroids = []
 
     prob = pd.Series(np.full((data.shape[0], 1), 1 / data.shape[0])[:, 0])
-    distances = np.zeros(data.shape[0])
 
     first_centroid_key = int(np.random.choice(data[data.columns[0]]))
-    first_centroid = data[data["Key"]==first_centroid_key].iloc[0]
+    first_centroid = data[data["Key"] == first_centroid_key].iloc[0]
     centroids.append(first_centroid)
 
     for i in range(k - 1):  # init k-1 more centroids
@@ -74,7 +73,7 @@ def init_centroids(data):
         prob /= sum_dx
 
         next_centroid_key = int(np.random.choice(data[data.columns[0]], p=prob))
-        new_centroid = data[data["Key"]==next_centroid_key].iloc[0]
+        new_centroid = data[data["Key"] == next_centroid_key].iloc[0]
         centroids.append(new_centroid)
 
     return pd.DataFrame(centroids)
