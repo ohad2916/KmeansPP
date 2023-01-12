@@ -88,6 +88,9 @@ points = pd.merge(obs1_df, obs2_df, how='inner', on=obs1_df.columns[0], sort=Tru
 points_df = pd.DataFrame(points)
 points_df = points_df.rename(columns={points_df.columns[0]: 'Key'})
 
+if k <= 0 or k >= points.size:
+    print("An Error has Occurred")
+    sys.exit()
 centroids_df = init_centroids(points_df)
 
 centroids_indices = centroids_df.iloc[:, 0].values.tolist()
